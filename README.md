@@ -1,6 +1,16 @@
 # Light SDD Workflow
 
-## Main phases
+## Table of Contents
+
+- [Workflow phases](#workflow-phases) — Light SDD Workflow has two main phases: **SPEC Phase (upstream)** where humans own business logic and define specifications, and **Development Phase (downstream)** where autonomous agents execute stories with human review and validation. Together they create a disciplined, specification-driven development cycle.
+
+- [Agile Methodologies on Light SDD Workflow](#agile-methodologies-on-light-sdd-workflow) — Two execution patterns for different contexts: **AllIn workflow** anticipates full architecture upfront (greenfield, clear requirements), while **AgileSDD workflow** iterates with feedback-driven adaptation (brownfield, evolving requirements). Choose based on your risk profile and project context; hybrid approaches combine both strategies.
+
+- [Key Notes](#key-notes) — Key concept deep-dives: understand why ralph-tui's autonomous loop and immediate feedback prevent integration disasters, why automated tests secure quality gates after each story, how greenfield vs brownfield contexts drive workflow choice, and why README/ARCHITECTURE documentation is critical for LLM-assisted development.
+
+- [Resources](#resources) — Curated external references organized by topic: specification standards, epic and agile methodologies, development tools and ralph-tui operations, and testing and security scanning best practices. Each link includes context on how it relates to Light SDD Workflow.
+
+## Workflow phases
 ### SPEC Phase (AKA upstream)
 This phase reflects the upstream phase on an agile flow. It will start with your specifications and will finish with epics and stories ready to run. Use a small LLM optimized for text processing and organization, but **keep humans in control of all business logic and architecture decisions**. The SPEC phase is where you capture what the system *must* do and *why*, establishing the foundation for all downstream work.
 
@@ -116,7 +126,7 @@ The Review phase is your final quality checkpoint before merging an epic into th
 
 **Merge Checklist**: Before clicking "Merge," verify: ✓ All automated checks (CI/CD pipeline) are passing. ✓ Tests are green (unit, integration, security scans). ✓ Code review comments are resolved or tracked for future work. ✓ ARCHITECTURE file is updated with patterns discovered during this epic. ✓ Manual testing was performed on critical user flows. ✓ No quality gates were violated. Once merged, your epic is complete and deployed (or ready for deployment, depending on your release process). Now you're ready to restart the cycle with the next epic—whether that's continuing in an AllIn workflow with the next epic you previously specified, or cycling back to SPEC phase in an AgileSDD workflow to write specifications for the next epic.
 
-## Epic workflows
+## Agile Methodologies on Light SDD Workflow
 ```mermaid
 stateDiagram
     classDef spec fill:yellow
@@ -166,7 +176,6 @@ Your choice between **AllIn** and **AgileSDD** workflows depends on your project
 Both approaches require discipline: AllIn demands rigorous SPEC work upfront (you can't change specs easily mid-development); AgileSDD demands honest feedback loops (you must capture learnings and permit adjustment). Choose the workflow that matches your risk profile and project context.
 
 ### AllIn Workflow
-
 **Purpose**: Commit to a complete system architecture upfront, then execute in parallel-friendly, well-scoped epics.
 
 **Detailed Workflow**:
@@ -220,7 +229,6 @@ Both approaches require discipline: AllIn demands rigorous SPEC work upfront (yo
 - ✓ **Examples**: New product line, complete rewrite of a system, internal tools with known workflows
 
 ### AgileSDD Workflow
-
 **Purpose**: Build incrementally, learning from each epic's implementation to inform the next, adapting to discovered requirements and constraints.
 
 **Detailed Workflow**:
@@ -293,7 +301,7 @@ Use this decision framework:
 
 **Hybrid Approach**: Many real projects use *both*. Example: "AllIn for the core authentication and data model epics (architectural foundation), then AgileSDD for feature modules built on top (feature discovery and feedback)." This captures AllIn's benefits for foundational decisions while preserving AgileSDD's flexibility for evolving features.
 
-## Notes
+## Key Notes
 ### What is ralph loop and the ralph-tui and why use it
 The **ralph-tui** is an autonomous agent loop orchestrator designed for the Development phase of the Light SDD Workflow. It reads your `prd.json` file (the JSON representation of your Product Requirements Document) and implements a continuous **four-step execution cycle**:
 
@@ -356,12 +364,11 @@ LLMs work best with clear context. When you ask an LLM to implement a story, it 
 Documentation also protects you from vendor lock-in or LLM dependency. Six months from now, if you need to refactor or extend code, a well-documented ARCHITECTURE file lets you (or another developer) understand intent without reconstructing it from code alone. For AI-written projects especially, this documentation is your insurance: it ensures knowledge survives beyond the LLM session and remains accessible to humans.
 
 ## Resources
-
 ### SPEC Phase
 - [Wikipedia - Software Requirements Specification](https://en.wikipedia.org/wiki/Software_requirements_specification) — Comprehensive overview of SRS standards, structure, requirement quality characteristics, and IEEE/ISO standards (IEEE 830, ISO/IEC/IEEE 29148)
 - [TechWhirl - Writing Software Requirements Specifications](https://techwhirl.com/writing-software-requirements-specifications/) — Practical guide on SRS templates, requirement quality indicators, avoiding ambiguous language, establishing traceability matrices, and best practices for writing unambiguous requirements
 
-### Epic Workflows & Agile Methodologies
+### Agile Methodologies on Light SDD Workflow
 - [Agile Manifesto](https://agilemanifesto.org/) — Core principles underlying iterative development, feedback-driven workflows, and adaptive planning essential to AgileSDD methodology
 - [Scrum Guide - Epics and Releases](https://scrumguides.org/) — Framework for organizing work into epics and managing incremental delivery; complements AgileSDD approach with ceremony and team structure
 - [SAFe Portfolio Level - Epics and Vision](https://www.scaledagileframework.com/) — Large-scale agile framework addressing multi-epic coordination, dependencies, and roadmap planning across distributed teams
