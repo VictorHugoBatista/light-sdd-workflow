@@ -1,36 +1,6 @@
 # Light SDD Workflow
 
-## Steps to take
-### Epic cycles
-
-```mermaid
-stateDiagram
-    classDef spec fill:yellow
-    classDef dev color: white,fill:green
-
-    class specPhaseComplete spec
-    class specPhaseOnyEpicByTime spec
-
-    class oneEpicByTime dev
-    class oneStoryByTime dev
-    class developEpic dev
-    class developStory dev
-
-    state AllIn {
-        specPhaseComplete --> oneEpicByTime
-        oneEpicByTime --> oneStoryByTime
-        oneStoryByTime --> oneStoryByTime
-        oneEpicByTime --> oneEpicByTime
-    }
-
-    state AgileSdd {
-        specPhaseOnyEpicByTime --> developEpic
-        developEpic --> developStory
-        developStory --> developStory
-        developEpic --> developEpic
-        specPhaseOnyEpicByTime --> specPhaseOnyEpicByTime
-    }
-```
+## Main phases
 
 ### SPEC Phase (AKA upstream)
 This phase reflects the upstream phase on an agile flow. It will start with your specifications and will to finish with epics and stories ready to run. Use a small LLM good to process and organize text.
@@ -49,7 +19,7 @@ These definitions doesn't need to be long or complex, but it need to describe th
 
 You can use flowcharts for complex chunks of logic, sequence diagrams for complex communications, timeline diagrams for rules that must happen in a specific order or state machine diagrams if your system has that type of complexity.
 
-> Separating the specs in development phases will make things easer on the later steps.
+> Separating the specs as epics in development phases will make things easer on the later steps.
 
 > Define all your quality gates here.
 
@@ -126,6 +96,46 @@ There's no much to say about the review phase. Just create your pull request as 
 If copilot return something relevant, you can solve it or ask a small LLM to solve for you. Again, be sure about your project integrity, run all your checks after each change and test manually if possible.
 
 Now your ready to restart the cycle on the next epic.
+
+## Epic cycles
+
+```mermaid
+stateDiagram
+    classDef spec fill:yellow
+    classDef dev color: white,fill:green
+
+    class specPhaseComplete spec
+    class specPhaseOnyEpicByTime spec
+    class oneEpicByTime dev
+    class oneStoryByTime dev
+    class developEpic dev
+    class developStory dev
+
+    specPhaseComplete: 1- Write the specs for all your epics
+    oneEpicByTime: 2- Run an epic on a separated branch
+    oneStoryByTime: 3- Run a epic story by time
+
+    specPhaseOnyEpicByTime: 1- Write the spec for one epic a time
+    developEpic: 2- Develop the written epic
+    developStory: 3- Develop one epic story by time
+
+    state AllIn {
+        specPhaseComplete --> oneEpicByTime : 1
+        oneEpicByTime --> oneStoryByTime : 2
+        oneStoryByTime --> oneStoryByTime : 3
+        oneStoryByTime --> oneEpicByTime : 4
+        oneEpicByTime --> oneEpicByTime : 5
+    }
+
+    state AgileSdd {
+        specPhaseOnyEpicByTime --> developEpic : 1
+        developEpic --> developStory : 2
+        developStory --> developEpic : 3
+        developStory --> developStory : 4
+        developEpic --> specPhaseOnyEpicByTime : 5
+        specPhaseOnyEpicByTime --> specPhaseOnyEpicByTime : 6
+    }
+```
 
 ## Notes
 ### What is ralph loop and the ralph-tui and why use it
