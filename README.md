@@ -426,3 +426,24 @@ Documentation also protects you from vendor lock-in or LLM dependency. Six month
 - [Mocha Testing Framework](https://mochajs.org/) — JavaScript test framework for unit and integration testing, used in this project for story validation
 - [NJSScan by OpenSecurity](https://github.com/ajinabraham/njsscan) — Static security scanner for Node.js applications, detects vulnerabilities and code quality issues as part of automated quality gates
 - [Continuous Integration Best Practices](https://martinfowler.com/articles/continuousIntegration.html) — Testing, automation, and high-frequency integration fundamentals that support the ralph loop and quality gates
+
+## Research References
+
+This workflow builds on foundational research and proven development methodologies. Detailed research and comparative analysis are documented in the following files:
+
+### [RALPH-LOOP.md](research-references/RALPH-LOOP.md)
+Research on the Ralph loop concept and its evolution into tools like ralph-tui. Includes:
+- Original Ralph loop concept by Geoffrey Huntley and foundational research
+- Creator's notes, derivations, and architectural decisions
+- Ralph-tui implementation documentation and GitHub references
+- Links to sources and community discussions shaping autonomous agent execution
+
+### [SSD.md](research-references/SSD.md)
+Comprehensive research on Specification-Driven Development workflows and competing methodologies. Includes:
+- Video introductions to SDD concepts (Portuguese and English)
+- GitHub Spec Kit — Microsoft's specification-first framework for modern development
+- BMAD Method — AI-optimized workflow with token cost optimization
+- Comparative analysis: when to use BMAD vs lighter alternatives, cost-benefit tradeoffs
+- Token efficiency studies and practical deployment considerations
+
+**Note**: These research files document the intellectual foundations, alternative approaches, and practical considerations informing Light SDD Workflow design decisions. They serve as reference material for understanding the methodology's positioning within the broader development automation landscape.
