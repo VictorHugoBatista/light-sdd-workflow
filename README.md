@@ -142,11 +142,63 @@ This workflow is more incremental and adaptive, suitable for projects where requ
 
 ## Notes
 ### What is ralph loop and the ralph-tui and why use it
+The **ralph-tui** is a task orchestration and execution tool designed for the Development phase of the Light SDD Workflow. It reads your `prd.json` file (the JSON representation of your Product Requirements Document) and provides an interactive UI for running and tracking user stories one at a time. You invoke it with `ralph-tui run --prd prd.json`, which loads all your defined stories and guides you through their execution with built-in progress tracking. This tool is what makes the Development phase practical—it eliminates manual bookkeeping of which stories are done, in-progress, or blocked.
+
+The **ralph loop** is the iterative development cycle that ralph-tui facilitates: **run story → review and test → detect errors → fix errors → repeat**. Rather than running all stories at once and testing at the end (which leads to discovering many bugs simultaneously and delays feedback), the ralph loop emphasizes incremental execution. After each story completes, you immediately review, test, and fix issues before moving to the next story. This approach catches errors early when they're fresh in context, reduces integration surprises, and keeps the codebase in a testable state throughout development.
+
+```mermaid
+flowchart LR
+    Start("📖 Story from ralph-tui")
+    Run("▶ Run story with LLM<br/>(code generation)")
+    Review("🔍 Review output &<br/>test if possible")
+    ErrorCheck{"❌ Issues<br/>found?"}
+    Fix("🔧 Fix errors<br/>(by hand or LLM)")
+    NextStory{"📋 More<br/>stories?"}
+    Complete("✅ Epic complete")
+    
+    Start --> Run
+    Run --> Review
+    Review --> ErrorCheck
+    ErrorCheck -->|Yes| Fix
+    Fix --> ErrorCheck
+    ErrorCheck -->|No| NextStory
+    NextStory -->|Yes| Start
+    NextStory -->|No| Complete
+    
+    style Start fill:#e1f5ff
+    style Run fill:#fff3e0
+    style Review fill:#f3e5f5
+    style ErrorCheck fill:#ffebee
+    style Fix fill:#ffe0b2
+    style NextStory fill:#e8f5e9
+    style Complete fill:#c8e6c9
+```
+
+Why use this? Because **integration and testing frequency dramatically reduces risk and effort**. Developers using the ralph loop catch semantic conflicts (where code compiles but doesn't work logically) immediately after a story completes, not weeks later during final integration. This short feedback loop means less rework, clearer error context, and—critically—keeps both the codebase and your confidence in code quality high throughout development.
 
 ### The importance of automated tests and security scans
+Automated tests and security scans are the foundation of maintaining quality gates throughout the Light SDD Workflow. Every story completion should trigger a consistent, automated verification: **does the code build? Do tests pass? Are there security vulnerabilities?** This prevents the workflow's biggest risk: shipping broken or insecure code because defects weren't caught early.
+
+In Light SDD, create a single script (e.g., `test.sh` or equivalent) that chains together: linting, build compilation, unit tests, integration tests, and security scanning. You can use libs/applications like `mocha` for testing and `opensecurity/njsscan` for SAST (Static Application Security Testing), so your script might run `mocha test/**/*.js` followed by `njsscan --output json .` to catch logic errors and security flaws in one pass. After completing each story with the ralph loop, is a good practice to run this single command once—if it passes, you know the story is solid (and never forget about the linter and its importance to maintain a pattern in the written code); if it fails, you fix it immediately with fresh context. This is far more efficient than discovering dozens of test failures after all stories complete.
+
+The specific types of checks matter: **unit tests** verify individual functions work correctly, **integration tests** confirm different components work together, and **security scans** detect patterns like hardcoded secrets, injection vulnerabilities, or dependency risks before code reaches production. By placing these in an automated script run after each story, you align your development practice with the workflow's core principle—continuous verification and early error detection. Documentation of your automated test approach should be in your ARCHITECTURE file so future developers understand the testing strategy.
 
 ### Green fields vs brown fields
+**Greenfield** development means building a new system from scratch—you have no existing codebase to work with, requirements are typically well-defined upfront, and you can architect systems optimally from the beginning. Greenfield projects are ideal for the **AllIn workflow** in Light SDD: write specifications for all epics first, then develop them in sequence. There are no legacy constraints, no existing code to understand, and no integration points with mature systems. Examples: building a new microservice, a new product line, or a complete rewrite of a system.
 
-### The importance of README and ARCHITECTURE files on Ai written projects
+**Brownfield** development means working within an existing system—you inherit legacy code, architectural decisions you didn't make, and constraints from production systems. Brownfield projects benefit from the **AgileSDD workflow**: write specifications one epic at a time, develop and deliver each epic, then repeat. Why? Because existing systems often have hidden requirements that only surface once you start working in them. By cycling through spec → development → delivery one epic at a time, you discover these constraints early and adapt your approach incrementally rather than midway through a months-long development cycle. Examples: adding features to a mature application, maintaining legacy systems, or integrating with existing infrastructure.
+
+The Light SDD Workflow structure (with AllIn and AgileSDD variants) explicitly acknowledges this distinction because greenfield and brownfield have fundamentally different risk profiles. Greenfield risk is *completeness and architectural correctness*—did you design the system right? Brownfield risk is *integration safety and unforeseen constraints*—does your new code break existing functionality? By choosing the workflow that matches your context, you address the right risks at the right time.
+
+### The importance of README and ARCHITECTURE files on AI written projects
+When using AI assistance in development, documentation becomes your **bridge of understanding**—both for the LLM and for future developers. A README that explains "what this system does and why" and an ARCHITECTURE file that captures "how it's built and why we chose this design" are not optional polish; they're essential inputs for effective AI collaboration.
+
+LLMs work best with clear context. When you ask an LLM to implement a story, it needs to understand your system's design patterns, business rules, and data flow. Without this, LLMs generate code that might work technically but violates your system's conventions, duplicates logic, or creates hidden bugs. A well-maintained ARCHITECTURE file describing your core patterns, data structures, and key decisions provides the grounding LLMs need to generate coherent, consistent code. Your Light SDD workflow's emphasis on including an **"architecture story" at the end of each epic**—dedicated to updating README and ARCHITECTURE files—reflects this necessity: after each epic, you capture what you've learned about the system's design, making that knowledge available for the next epic's LLM assistance.
+
+Documentation also protects you from vendor lock-in or LLM dependency. Six months from now, if you need to refactor or extend code, a well-documented ARCHITECTURE file lets you (or another developer) understand intent without reconstructing it from code alone. For AI-written projects especially, this documentation is your insurance: it ensures knowledge survives beyond the LLM session and remains accessible to humans.
 
 ## Resources
+- [Martin Fowler - Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html) — Comprehensive article on greenfield vs brownfield development contexts, branching strategies, and integration patterns in software development
+- [Continuous Integration Best Practices](https://martinfowler.com/articles/continuousIntegration.html) — Martin Fowler's guide on high-frequency integration, testing strategies, and maintaining code quality through automation
+- [Mocha Testing Framework](https://mochajs.org/) — JavaScript test framework used in this project for unit and integration testing
+- [NJSScan by OpenSecurity](https://github.com/ajinabraham/njsscan) — Static security scanner for Node.js applications, detects security vulnerabilities and code quality issues
