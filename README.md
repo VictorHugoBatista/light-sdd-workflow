@@ -1,5 +1,48 @@
 # Light SDD Workflow
 
+## What Is Light SDD Workflow?
+**Light SDD Workflow** is a lightweight, language-agnostic methodology for building software with LLM assistance, where humans own critical business logic and architecture decisions, and AI agents accelerate code execution. Created on **April 24, 2026**, this workflow acknowledges a critical reality: the AI landscape evolves faster than any single tool or framework. Light SDD is designed to be adaptable, tool-independent, and future-proof.
+
+### A Path to Follow, Not a Law
+This workflow provides **prescribed guidance** for how to structure specifications, execute stories, and maintain quality—but it is **not dogmatic**. Your team may find better approaches for your specific context. Adapt the principles to your needs: your ARCHITECTURE file, your quality gates, your branching strategy, your review process. The core structure (SPEC Phase → Development Phase → agent execution → human review) is proven to catch issues early and keep humans in control.
+
+### Lighter Than Ready Solutions
+Unlike heavyweight frameworks (SAFe, Disciplined Agile, etc.), Light SDD is:
+- **Minimal ceremony**: No prescribed daily standups, burndown charts, or role explosion for small teams
+- **Focused on essentials**: Specifications, epics, stories, quality gates, and human review—nothing more
+- **Clear responsibility division**: Humans make critical decisions (business logic, architecture, quality); agents accelerate execution (code generation, testing)
+- **Uncompromising on quality**: Lightweight process, rigorous quality gates—you choose the balance
+
+### Language & Framework Agnostic—Works Anywhere
+This workflow works with **any programming language** (Python, JavaScript, Go, Rust, Java, C#, etc.) and **any framework** (React, Django, Spring Boot, FastAPI, Next.js, etc.). Adapt your tools to fit:
+- **Test frameworks**: Mocha for Node.js, pytest for Python, testing.T for Go, cargo test for Rust
+- **Security scanning**: njsscan for Node.js, bandit for Python, gosec for Go, cargo audit for Rust
+- **Build and CI/CD**: Your preferred pipeline (GitHub Actions, GitLab CI, Jenkins, etc.)
+
+The **core workflow is language-independent**: Write SPEC.md → Generate PRD.md/PRD.json → Execute stories → Review and validate. The tools change; the methodology remains.
+
+### Tool-Agnostic by Design—AI Models Will Change
+Here's a crucial insight written on **April 24, 2026**: The AI landscape moves at unprecedented speed. **Ralph-tui** is mentioned throughout this workflow as the recommended execution tool. But ralph-tui is **only one component**—the Development Phase execution orchestrator. **Ralph-tui can be replaced** with any comparable agent orchestrator.
+
+**All other workflow phases work with any capable, lightweight LLM**:
+- **SPEC Phase**: Write specifications using any LLM (Claude Haiku 3.5, Gemini, Llama, Grok, or whatever emerges next month). The LLM is a tool to review your specs for inconsistencies and help structure your documentation—not to own the business logic.
+- **PRD Generation**: Use any LLM to transform SPEC.md into PRD.md and PRD.json. The methodology remains; the model changes.
+- **Story Review & Quality Analysis**: Use any LLM to analyze PRD completeness and consistency.
+- **Development Phase Execution**: Ralph-tui is *recommended*, but you could use Cursor, Continue.dev, a custom agent loop, VS Code's GitHub Copilot with a script, or whatever execution tool emerges. The pattern is universal: agent generates code → human reviews → quality gates validate → human decides next action.
+- **Code Review & Analysis**: Use any LLM (like Claude Haiku 3.5, fast and cost-effective) to review pull requests, suggest improvements, or analyze code patterns.
+
+**Example using Claude Haiku 3.5 (as of April 24, 2026)**: You can run your entire SPEC Phase, PRD generation, and code review using Claude Haiku 3.5 (fast, inexpensive, capable for text analysis). Ask Haiku to review your specifications for contradictions, help structure business rules, validate your PRD against SPEC, and review PRs. In two weeks or two months, a faster, cheaper, or more capable model might emerge—Haiku 4.5, or something new entirely. With Light SDD, you simply *switch the model*. Your workflow doesn't depend on any single LLM or tool.
+
+### Keeps Humans in Control—Leverages Agents Correctly
+The fundamental principle: **Agents accelerate, humans decide**.
+- **Humans decide**: Business rules, system architecture, quality gates, acceptance of generated code, trade-offs between speed and quality, what gets prioritized next
+- **Agents assist**: Code generation, pattern detection, consistency checking, test writing, refactoring suggestions, code review comments, specification review
+- **Humans validate**: Every story output is reviewed, tested (both automated and manual), and verified against acceptance criteria before acceptance
+
+This division prevents the biggest risk in LLM-assisted development: **drifting into a state where agents make architectural or business decisions**. Light SDD prevents this through mandatory human review, quality gates, and explicit documentation of why decisions were made (via your ARCHITECTURE file).
+
+---
+
 ## Table of Contents
 
 - [Workflow phases](#workflow-phases) — Light SDD Workflow has two main phases: **SPEC Phase (upstream)** where humans own business logic and define specifications, and **Development Phase (downstream)** where autonomous agents execute stories with human review and validation. Together they create a disciplined, specification-driven development cycle.
