@@ -1,7 +1,6 @@
 # Light SDD Workflow
 
 ## Main phases
-
 ### SPEC Phase (AKA upstream)
 This phase reflects the upstream phase on an agile flow. It will start with your specifications and will to finish with epics and stories ready to run. Use a small LLM good to process and organize text.
 
@@ -40,7 +39,6 @@ This is the json file actually readen by the ralph-tui application. It should ha
 > Review the file and agree with it before the next step.
 
 ### Development phase (AKA downstream)
-
 #### Developement
 ```mermaid
 flowchart LR
@@ -97,8 +95,7 @@ If copilot return something relevant, you can solve it or ask a small LLM to sol
 
 Now your ready to restart the cycle on the next epic.
 
-## Epic cycles
-
+## Epic workflows
 ```mermaid
 stateDiagram
     classDef spec fill:yellow
@@ -136,6 +133,12 @@ stateDiagram
         specPhaseOnyEpicByTime --> specPhaseOnyEpicByTime : 6
     }
 ```
+
+### AllIn Workflow
+This workflow is ideal when you have a clear vision of the entire system from the start. You begin by writing the specifications for all your epics at once (`specPhaseComplete`, step 1). Then, for each epic, you create a separate branch and develop it independently (`oneEpicByTime`, step 2). Within each epic, you work through the stories one by one (`oneStoryByTime`, step 3), iterating on them until the epic is complete. After finishing an epic, you move on to the next, repeating the process. This approach is structured and works well for greenfield projects or when requirements are stable and well-understood.
+
+### AgileSdd Workflow
+This workflow is more incremental and adaptive, suitable for projects where requirements may evolve or are not fully known upfront. Here, you write the specification for one epic at a time (`specPhaseOnyEpicByTime`, step 1). You then develop that epic (`developEpic`, step 2), working through its stories individually (`developStory`, step 3). After completing a story, you can either continue with the next story or revisit the epic for adjustments. Once the epic is done, you return to the specification phase for the next epic. This cycle allows for continuous feedback and adaptation, making it ideal for agile teams and projects with changing needs.
 
 ## Notes
 ### What is ralph loop and the ralph-tui and why use it
