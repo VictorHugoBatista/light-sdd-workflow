@@ -1,7 +1,38 @@
 # Light SDD Workflow
 
 ## Steps to take
-### SPEC Phase
+### Epic cycles
+
+```mermaid
+stateDiagram
+    classDef spec fill:yellow
+    classDef dev color: white,fill:green
+
+    class specPhaseComplete spec
+    class specPhaseOnyEpicByTime spec
+
+    class oneEpicByTime dev
+    class oneStoryByTime dev
+    class developEpic dev
+    class developStory dev
+
+    state AllIn {
+        specPhaseComplete --> oneEpicByTime
+        oneEpicByTime --> oneStoryByTime
+        oneStoryByTime --> oneStoryByTime
+        oneEpicByTime --> oneEpicByTime
+    }
+
+    state AgileSdd {
+        specPhaseOnyEpicByTime --> developEpic
+        developEpic --> developStory
+        developStory --> developStory
+        developEpic --> developEpic
+        specPhaseOnyEpicByTime --> specPhaseOnyEpicByTime
+    }
+```
+
+### SPEC Phase (AKA upstream)
 This phase reflects the upstream phase on an agile flow. It will start with your specifications and will to finish with epics and stories ready to run. Use a small LLM good to process and organize text.
 
 ```mermaid
@@ -38,20 +69,18 @@ This is the json file actually readen by the ralph-tui application. It should ha
 
 > Review the file and agree with it before the next step.
 
-### Development phase
+### Development phase (AKA downstream)
+
+#### Developement
 ```mermaid
 flowchart LR
     1@{ shape: sm-circ, label: "Small start" }
-    2@{ shape: framed-circle, label: "Stop" }
+    2@{ shape: subproc, label: "Review" }
     a("Run a story with LLM")
     b("Review and test (if possible)")
     c{"Is there some error?"}
     d("Fix errors (by hand or with LLM)")
     e{"Are there more stories on epic?"}
-    f("Create a pull request")
-    g("Add copilot as reviewer / review with your human pairs")
-    h("Resolve the comments by hand or with LLM")
-    i("Make sure all the quality gates still are ok")
 
     1 --> a
     subgraph Development
@@ -62,16 +91,41 @@ flowchart LR
         c --->|"No"| e
         e --->|"yes"| b
     end
-        e --->|"No"| f
+
+    e -->|"no"| 2
+```
+
+This is the moment where you assist the LLM to run all the plan prepared on SPEC phase. If you are using the ralph-tui application, you can run the commnad `ralph-tui run --prd prd.json` for starting the ui.
+
+You can run all the stories automatically and test only in the end, but this has a potential to take more time than save it. Just prefer to run one small story by time and review / test when possible.
+
+Create a script that runs build/lint/security/scan/automated tests at once. Then, you will need to run only one command to test the project integrity after running a story. If possible, test manually too. **Be sure your product works**.
+
+If some fix be necessary, you can fixit or ask a LLM to fix for you. Again, small LLMs are doing a great job on this minor fixes and refactor to me.
+
+Repeat this proccess until all stories be finished.
+
+#### Review
+```mermaid
+flowchart LR
+    1@{ shape: subproc, label: "Development" }
+    2@{ shape: framed-circle, label: "Stop" }
+    f("Create a pull request")
+    g("Add copilot as reviewer / review with your human pairs")
+    h("Resolve the comments by hand or with LLM")
+    i("Make sure all the quality gates still are ok")
+
+    1 --> f
     subgraph Review
         f --> g --> h --> i
     end
     i --> 2
 ```
+There's no much to say about the review phase. Just create your pull request as you always done. But, if you use github, you can ask copilot to review the code for you. Ask your pairs to review it too, **humans are not obsolete**.
 
-#### Developement
+If copilot return something relevant, you can solve it or ask a small LLM to solve for you. Again, be sure about your project integrity, run all your checks after each change and test manually if possible.
 
-#### Review
+Now your ready to restart the cycle on the next epic.
 
 ## Notes
 ### What is ralph loop and the ralph-tui and why use it
@@ -81,3 +135,5 @@ flowchart LR
 ### Green fields vs brown fields
 
 ### The importance of README and ARCHITECTURE files on Ai written projects
+
+## Resources
