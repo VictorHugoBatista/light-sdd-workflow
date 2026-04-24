@@ -155,11 +155,143 @@ stateDiagram
     }
 ```
 
-### AllIn Workflow
-This workflow is ideal when you have a clear vision of the entire system from the start. You begin by writing the specifications for all your epics at once (`specPhaseComplete`, step 1). Then, for each epic, you create a separate branch and develop it independently (`oneEpicByTime`, step 2). Within each epic, you work through the stories one by one (`oneStoryByTime`, step 3), iterating on them until the epic is complete. After finishing an epic, you move on to the next, repeating the process. This approach is structured and works well for greenfield projects or when requirements are stable and well-understood.
+### Workflow Choice: Context-Dependent Strategy
 
-### AgileSdd Workflow
-This workflow is more incremental and adaptive, suitable for projects where requirements may evolve or are not fully known upfront. Here, you write the specification for one epic at a time (`specPhaseOnyEpicByTime`, step 1). You then develop that epic (`developEpic`, step 2), working through its stories individually (`developStory`, step 3). After completing a story, you can either continue with the next story or revisit the epic for adjustments. Once the epic is done, you return to the specification phase for the next epic. This cycle allows for continuous feedback and adaptation, making it ideal for agile teams and projects with changing needs.
+Your choice between **AllIn** and **AgileSDD** workflows depends on your project's context—specifically, whether you're building something new (greenfield) or working within an existing system (brownfield), how well you understand requirements upfront, and how much feedback you need during development. Neither workflow is universally "better"; they address different risk profiles.
+
+**AllIn** is an **anticipatory workflow**: you invest upfront in understanding the entire system's architecture before any development starts. You specify all epics, then develop them sequentially. This works when requirements are well-understood, your team is stable, and architectural coherence across all features is critical. The risk you're managing is *architectural correctness*—getting the system design right from the start.
+
+**AgileSDD** is an **iterative feedback workflow**: you specify one epic at a time, develop and deliver it, gather feedback from stakeholders and learnings from the code, then specify the next epic informed by that feedback. This works when requirements are hidden or evolving, you need stakeholder feedback to drive priorities, and you're working within existing systems with unforeseen constraints. The risk you're managing is *integration safety and discovery* — avoiding big investments in wrong directions by learning incrementally.
+
+Both approaches require discipline: AllIn demands rigorous SPEC work upfront (you can't change specs easily mid-development); AgileSDD demands honest feedback loops (you must capture learnings and permit adjustment). Choose the workflow that matches your risk profile and project context.
+
+### AllIn Workflow
+
+**Purpose**: Commit to a complete system architecture upfront, then execute in parallel-friendly, well-scoped epics.
+
+**Detailed Workflow**:
+
+1. **Write Specs for ALL Epics** (SPEC Phase)
+   - You develop a comprehensive SPEC.md that covers every planned epic
+   - Identify all major features and their interactions upfront  
+   - Define system architecture, business rules, quality gates across the full scope
+   - Generate a PRD.md and PRD.json for the entire product
+   - Example: Building an e-commerce platform? Spec all 5 epics at once (Auth, Product Catalog, Shopping Cart, Payments, Shipping) so you can verify their interactions and dependencies upfront
+   - Goal: Establish a coherent system architecture *before any development starts*
+
+2. **For Each Epic: Create Isolated Branch** (epic-auth, epic-catalog, epic-cart, etc.)
+   - Each epic is developed on a separate feature branch for clean isolation
+   - Stories within each epic are executed using ralph-tui with pause/resume discipline
+   - Start with ralph-tui (`ralph-tui run --prd prd.json --filter epic:auth`), use `s` to start, `p` after each story
+
+3. **Story-by-Story Development and Testing**
+   - Ralph-tui presents stories one at a time within the epic
+   - After each story: immediately run quality gates, test manually, validate
+   - Keep the incremental testing discipline even within AllIn
+
+4. **Epic Review and Merge** (Review Phase)
+   - Create pull request for the entire epic branch
+   - Verify all stories complete, all quality gates pass, ARCHITECTURE file updated
+   - Merge to main
+
+5. **Repeat for Next Epic**
+   - Move to the next epic (e.g., epic-catalog), repeat the process
+   - Previously completed epics are stable; new epics build on that foundation
+
+**Benefits**:
+- **Architectural Coherence**: Full system architecture visible and agreed before code exists; epics can't conflict on fundamental design decisions
+- **No Integration Surprises**: Dependencies and interactions all defined upfront; less rework
+- **Parallelizable Planning**: Teams can discuss and understand entire system flow before development; reduces waiting for clarity
+- **Predictable Scope & Timeline**: All epics known upfront; easier to estimate total work and plan team capacity
+- **Consistent Quality Gates**: Standards defined globally in SPEC; every epic follows the same quality targets
+
+**Risks & Challenges**:
+- **Heavy Upfront SPEC Work**: SPEC phase is longer and more complex; wrong specs discovered during development waste months
+- **Difficult to Accommodate Change**: If requirements shift mid-development, revisiting specs and prior epics becomes expensive
+- **Team Must Be Stable**: Architecture consensus required upfront; team disengagement or disagreement late is costly
+- **Assumption Risk**: Specs assume understanding of problem domain; assumptions can be wrong despite good analysis
+
+**When to Choose AllIn**:
+- ✓ **Greenfield projects** (building from scratch, not integrating with legacy systems)
+- ✓ **Clear, Stable Requirements** (stakeholders know what they want; requirements unlikely to change fundamentally)
+- ✓ **Stable Team & Leadership** (same people throughout, architectural decisions won't flip)
+- ✓ **Complex System Architecture** (architecture deserves upfront design; poor design wastes months later)
+- ✓ **Long Development Cycle Acceptable** (can invest 4-6 weeks in solid SPEC phase)
+- ✓ **Examples**: New product line, complete rewrite of a system, internal tools with known workflows
+
+### AgileSDD Workflow
+
+**Purpose**: Build incrementally, learning from each epic's implementation to inform the next, adapting to discovered requirements and constraints.
+
+**Detailed Workflow**:
+
+1. **Write Spec for ONE Epic** (SPEC Phase, Limited Scope)
+   - You develop a SPEC.md for the first epic only—just enough to begin implementation
+   - Example: Adding features to a legacy CRM. First spec: "Mobile API for field access" (know enough about this epic to start, but don't spec "Data Export" or "Workflow Automation" yet)
+   - Generate PRD.md and PRD.json for just this epic
+   - Goal: Start learning about the system through implementation
+
+2. **Develop the Epic** (Development Phase, Full Cycle)
+   - Execute all stories in the epic using ralph-tui with `s` to start, `p` after each story
+   - Run ralph-tui on the epic: (`ralph-tui run --prd prd.json --filter epic:mobile-api`)
+   - Every story completes with quality gates passing and manual testing done
+   - Document learnings: What patterns did you discover in the legacy code? What constraints exist? What surprised you?
+
+3. **Deliver This Epic** (Review Phase + Merge to Main)
+   - Review, test, merge the complete epic to main (not a temporary branch—it's done and ready)
+   - Stakeholders see working features
+   - Gather feedback: Do these features work for users? What's next? What needs rework?
+
+4. **Capture Learnings and Feedback**
+   - Document what you learned about the system's architecture, constraints, hidden requirements
+   - Translate stakeholder feedback into new epics or adjustments to planned epics
+   - Example learning: "Mobile API revealed that legacy data model has inconsistencies; future epics need data normalization"
+   - This discovery would be invisible in AllIn until much later
+
+5. **Write Spec for NEXT Epic** (Back to SPEC Phase)
+   - Armed with learnings from Epic 1, specify Epic 2
+   - Example: "Data Export to Analytics" — now you understand legacy data quality issues; spec accordingly
+   - Repeat: Develop → Deliver → Learn → Spec next
+
+**Benefits**:
+- **Early Feedback Loop**: Working features delivered within weeks; stakeholders see progress and course-correct early
+- **Reduces Wasted Effort**: Wrong assumptions caught during Epic 1, not after all 5 epics are designed. Cost of pivoting is low.
+- **Discovers Hidden Requirements**: Brownfield/legacy systems always hide requirements. Incremental work surfaces them fast.
+- **Accommodates Change**: Next epic can adapt based on learnings and feedback. Priorities can shift.
+- **Team Learning**: Team understands system patterns and constraints progressively; later epics benefit from prior knowledge
+- **Stakeholder Confidence**: Seeing working features weekly/bi-weekly maintains buy-in and trust
+
+**Risks & Challenges**:
+- **Incomplete Upfront Architecture**: Full system architecture emerges gradually; Epic 3 may conflict with Epic 1's design, requiring rework
+- **Higher Rework Probability**: Earlier epics may need refactoring when later epics reveal conflicts (data model changes, API redesigns, etc.)
+- **Unpredictable Timeline**: Can't estimate all epics at once; total project cost/duration less certain
+- **Requires Honest Stakeholder Feedback**: Iteration only works if feedback is real (not just "ship everything"); bad feedback leads to wrong pivots
+- **Dependency Chains**: Later epics blocked by earlier ones; can't parallelize as easily as AllIn
+
+**When to Choose AgileSDD**:
+- ✓ **Brownfield Projects** (existing systems, legacy code constraints)
+- ✓ **Hidden or Evolving Requirements** (stakeholders don't fully know what they want; understand through discovery)
+- ✓ **Need Stakeholder Feedback Fast** (early, frequent feedback critical for success)
+- ✓ **Change Likely** (market conditions, stakeholder priorities, tech constraints may shift)
+- ✓ **Exploratory Projects** (uncovering new market needs, MVP for new business idea)
+- ✓ **Multiple Unknowns** (uncertain team, unstable stakeholders, undocumented legacy systems)
+- ✓ **Examples**: Adding features to mature applications, maintaining/extending legacy systems, R&D projects with uncertain outcomes
+
+### Choosing Between AllIn and AgileSDD
+
+Use this decision framework:
+
+| Factor | AllIn | AgileSDD |
+|--------|-------|----------|
+| **System Context** | Greenfield (new from scratch) | Brownfield (existing system) |
+| **Requirements Clarity** | Well-understood, stable | Unclear, evolving, hidden |
+| **Stakeholder Engagement** | Stable, aligned upfront | Feedback-driven, adaptive |
+| **Primary Risk** | Architectural wrongness | Integration problems, hidden constraints |
+| **Feedback Frequency** | Upfront consensus | Early, frequent delivery + feedback |
+| **Timeline Predictability** | Known (spec upfront) | Uncertain (learn through delivery) |
+| **Accommodation of Change** | Difficult, costly | Expected, built-in |
+
+**Hybrid Approach**: Many real projects use *both*. Example: "AllIn for the core authentication and data model epics (architectural foundation), then AgileSDD for feature modules built on top (feature discovery and feedback)." This captures AllIn's benefits for foundational decisions while preserving AgileSDD's flexibility for evolving features.
 
 ## Notes
 ### What is ralph loop and the ralph-tui and why use it
@@ -229,13 +361,18 @@ Documentation also protects you from vendor lock-in or LLM dependency. Six month
 - [Wikipedia - Software Requirements Specification](https://en.wikipedia.org/wiki/Software_requirements_specification) — Comprehensive overview of SRS standards, structure, requirement quality characteristics, and IEEE/ISO standards (IEEE 830, ISO/IEC/IEEE 29148)
 - [TechWhirl - Writing Software Requirements Specifications](https://techwhirl.com/writing-software-requirements-specifications/) — Practical guide on SRS templates, requirement quality indicators, avoiding ambiguous language, establishing traceability matrices, and best practices for writing unambiguous requirements
 
+### Epic Workflows & Agile Methodologies
+- [Agile Manifesto](https://agilemanifesto.org/) — Core principles underlying iterative development, feedback-driven workflows, and adaptive planning essential to AgileSDD methodology
+- [Scrum Guide - Epics and Releases](https://scrumguides.org/) — Framework for organizing work into epics and managing incremental delivery; complements AgileSDD approach with ceremony and team structure
+- [SAFe Portfolio Level - Epics and Vision](https://www.scaledagileframework.com/) — Large-scale agile framework addressing multi-epic coordination, dependencies, and roadmap planning across distributed teams
+- [Continuous Delivery - Deployment Pipeline](https://continuousdelivery.com/) — Practices for frequent, reliable epic delivery to production; supports both AllIn and AgileSDD with automated quality gates and fast feedback
+
 ### Development Phase & Ralph Loop
 - [Ralph TUI - AI Agent Loop Orchestrator](https://ralph-tui.com) — Comprehensive documentation on autonomous agent orchestration, four-step execution cycle (SELECT/PROMPT/EXECUTE/EVALUATE), task routing, session persistence, and TUI dashboard monitoring. Essential reference for understanding ralph-tui operations and command interface.
 - [Martin Fowler - Patterns for Managing Source Code Branches](https://martinfowler.com/articles/branching-patterns.html) — Understanding greenfield vs brownfield development contexts, branching strategies for sustainable development, and integration frequency patterns
 - [Martin Fowler - Continuous Integration](https://martinfowler.com/articles/continuousIntegration.html) — High-frequency integration practices, testing strategies, and maintaining code quality through automation—directly aligned with the ralph loop approach
 
 ### Notes (Quality Gates & Testing)
-- [Ralph TUI - AI Agent Loop Orchestrator](https://ralph-tui.com) — Comprehensive documentation on autonomous agent orchestration, four-step execution cycle (SELECT/PROMPT/EXECUTE/EVALUATE), task routing, session persistence, and TUI dashboard monitoring. Essential reference for understanding ralph-tui operations and command interface.
 - [Mocha Testing Framework](https://mochajs.org/) — JavaScript test framework for unit and integration testing, used in this project for story validation
 - [NJSScan by OpenSecurity](https://github.com/ajinabraham/njsscan) — Static security scanner for Node.js applications, detects vulnerabilities and code quality issues as part of automated quality gates
 - [Continuous Integration Best Practices](https://martinfowler.com/articles/continuousIntegration.html) — Testing, automation, and high-frequency integration fundamentals that support the ralph loop and quality gates
