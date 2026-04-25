@@ -459,4 +459,8 @@ Comprehensive research on Specification-Driven Development workflows and competi
 
 **Note**: These research files document the intellectual foundations, alternative approaches, and practical considerations informing Light SDD Workflow design decisions. They serve as reference material for understanding the methodology's positioning within the broader development automation landscape.
 
+## Credits & Attribution
+
+The visual designs and diagrams in this documentation were generated using **Nano Banana**, an AI image generation tool integrated with **Google Gemini Chat**. Images include the main title, workflow diagrams, agile methodology illustrations, and section headers.
+
 ![footer](images/footer.png)
