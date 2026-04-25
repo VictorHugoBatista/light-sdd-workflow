@@ -1,5 +1,7 @@
 # Light SDD Workflow
 
+![main-title](images/main-title.png)
+
 ## What Is Light SDD Workflow?
 **Light SDD Workflow** is a lightweight, language-agnostic methodology for building software with LLM assistance, where humans own critical business logic and architecture decisions, and AI agents accelerate code execution. Written on **April 24, 2026**, this workflow acknowledges a critical reality: the AI landscape evolves faster than any single tool or framework. Light SDD is designed to be adaptable, tool-independent, and future-proof.
 
@@ -56,6 +58,7 @@ This division prevents the biggest risk in LLM-assisted development: **drifting 
 - [Research References](#research-references) — Foundational research files documenting the intellectual foundations and competing methodologies informing Light SDD Workflow design. Includes the Ralph loop concept evolution, Specification-Driven Development research, and comparative analysis of automation approaches.
 
 ## Workflow phases
+![work](images/work.png)
 ### SPEC Phase (AKA upstream)
 This phase reflects the upstream phase on an agile flow. It will start with your specifications and will finish with epics and stories ready to run. Use a small LLM optimized for text processing and organization, but **keep humans in control of all business logic and architecture decisions**. The SPEC phase is where you capture what the system *must* do and *why*, establishing the foundation for all downstream work.
 
@@ -174,6 +177,8 @@ The Review phase is your final quality checkpoint before merging an epic into th
 **Merge Checklist**: Before clicking "Merge," verify: ✓ All automated checks (CI/CD pipeline) are passing. ✓ Tests are green (unit, integration, security scans). ✓ Code review comments are resolved or tracked for future work. ✓ ARCHITECTURE file is updated with patterns discovered during this epic. ✓ Manual testing was performed on critical user flows. ✓ No quality gates were violated. Once merged, your epic is complete and deployed (or ready for deployment, depending on your release process). Now you're ready to restart the cycle with the next epic—whether that's continuing in an AllIn workflow with the next epic you previously specified, or cycling back to SPEC phase in an AgileSDD workflow to write specifications for the next epic.
 
 ## Agile Methodologies on Light SDD Workflow
+![agile](images/agile.png)
+
 ```mermaid
 stateDiagram
     classDef spec fill:yellow
@@ -349,6 +354,7 @@ Use this decision framework:
 **Hybrid Approach**: Many real projects use *both*. Example: "AllIn for the core authentication and data model epics (architectural foundation), then AgileSDD for feature modules built on top (feature discovery and feedback)." This captures AllIn's benefits for foundational decisions while preserving AgileSDD's flexibility for evolving features.
 
 ## Key Notes
+![notebook](images/notebook.png)
 ### What is ralph loop and the ralph-tui and why use it
 The **ralph-tui** is an autonomous agent loop orchestrator designed for the Development phase of the Light SDD Workflow. It reads your `prd.json` file (the JSON representation of your Product Requirements Document) and implements a continuous **four-step execution cycle**:
 
@@ -411,6 +417,7 @@ LLMs work best with clear context. When you ask an LLM to implement a story, it 
 Documentation also protects you from vendor lock-in or LLM dependency. Six months from now, if you need to refactor or extend code, a well-documented ARCHITECTURE file lets you (or another developer) understand intent without reconstructing it from code alone. For AI-written projects especially, this documentation is your insurance: it ensures knowledge survives beyond the LLM session and remains accessible to humans.
 
 ## Resources
+![resources](images/resources.png)
 ### SPEC Phase
 - [Wikipedia - Software Requirements Specification](https://en.wikipedia.org/wiki/Software_requirements_specification) — Comprehensive overview of SRS standards, structure, requirement quality characteristics, and IEEE/ISO standards (IEEE 830, ISO/IEC/IEEE 29148)
 - [TechWhirl - Writing Software Requirements Specifications](https://techwhirl.com/writing-software-requirements-specifications/) — Practical guide on SRS templates, requirement quality indicators, avoiding ambiguous language, establishing traceability matrices, and best practices for writing unambiguous requirements
@@ -451,3 +458,5 @@ Comprehensive research on Specification-Driven Development workflows and competi
 - Token efficiency studies and practical deployment considerations
 
 **Note**: These research files document the intellectual foundations, alternative approaches, and practical considerations informing Light SDD Workflow design decisions. They serve as reference material for understanding the methodology's positioning within the broader development automation landscape.
+
+![footer](images/footer.png)
