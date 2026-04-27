@@ -183,7 +183,7 @@ The Review phase is your final quality checkpoint before merging an epic into th
 
 ```mermaid
 stateDiagram
-    classDef spec fill:yellow
+    classDef spec color:black, fill:yellow
     classDef dev color: white,fill:green
 
     class specPhaseComplete spec
