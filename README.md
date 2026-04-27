@@ -57,6 +57,8 @@ This division prevents the biggest risk in LLM-assisted development: **drifting 
 
 - [Research References](#research-references) — Foundational research files documenting the intellectual foundations and competing methodologies informing Light SDD Workflow design. Includes the Ralph loop concept evolution, Specification-Driven Development research, and comparative analysis of automation approaches.
 
+- [Developers](#developers) — Contributors and maintainers of the Light SDD Workflow project.
+
 ## Workflow phases
 ![work](images/work.png)
 ### SPEC Phase (AKA upstream)
@@ -458,6 +460,13 @@ Comprehensive research on Specification-Driven Development workflows and competi
 - Token efficiency studies and practical deployment considerations
 
 **Note**: These research files document the intellectual foundations, alternative approaches, and practical considerations informing Light SDD Workflow design decisions. They serve as reference material for understanding the methodology's positioning within the broader development automation landscape.
+
+## Developers
+
+This workflow is developed and maintained by:
+
+- [@VictorHugoBatista](https://github.com/VictorHugoBatista) — Architect and principal contributor
+- [@felipercamara](https://github.com/felipercamara) — Contributor
 
 ## Credits & Attribution
 
