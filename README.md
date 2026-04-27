@@ -463,10 +463,10 @@ Comprehensive research on Specification-Driven Development workflows and competi
 
 ## Developers
 
-This workflow is developed and maintained by:
+This workflow was put together and tested by:
 
-- [@VictorHugoBatista](https://github.com/VictorHugoBatista) — Architect and principal contributor
-- [@felipercamara](https://github.com/felipercamara) — Contributor
+- [@VictorHugoBatista](https://github.com/VictorHugoBatista)
+- [@felipercamara](https://github.com/felipercamara)
 
 ## Credits & Attribution
 
